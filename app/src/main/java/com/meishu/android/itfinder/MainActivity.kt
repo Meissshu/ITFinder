@@ -14,7 +14,7 @@ import com.meishu.android.itfinder.fragments.EventsFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private  lateinit var toolbar : Toolbar
+    private lateinit var toolbar : Toolbar
     private lateinit var tabLayout : TabLayout
     private lateinit var viewPager : ViewPager
 
