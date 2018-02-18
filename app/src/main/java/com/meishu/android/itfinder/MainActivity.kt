@@ -10,13 +10,18 @@ import android.support.v4.view.ViewPager
 
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import com.meishu.android.itfinder.fragments.EventsFragment
+import com.meishu.android.itfinder.fragments.LikedFragment
+import com.meishu.android.itfinder.fragments.SearchFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var toolbar : Toolbar
-    private lateinit var tabLayout : TabLayout
-    private lateinit var viewPager : ViewPager
+    private lateinit var toolbar: Toolbar
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +41,37 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+            when (item.itemId) {
+                R.id.menu_about -> {
+                    Log.i("tag", "menu about clicked")
+                    true
+                }
+
+                R.id.menu_bug_report -> {
+                    Log.i("tag", "menu bug report")
+                    true
+                }
+
+                R.id.menu_settings -> {
+                    Log.i("tag", "menu settings")
+                    true
+                }
+
+                else -> super.onOptionsItemSelected(item)
+            }
+
+
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(EventsFragment(), "Events")
+        adapter.addFragment(SearchFragment(), "Search")
+        adapter.addFragment(LikedFragment(), "Liked")
         viewPager.adapter = adapter
     }
 
