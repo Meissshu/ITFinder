@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dataSourceArr">
+        <item>First source</item>
+        <item>Second source</item>
+        <item>Third source</item>
+    </string-array>
+
+    <string-array name="dataSourceVal">
+        <item>some url</item>
+        <item>some url</item>
+        <item>some url</item>
+    </string-array>
+
+    <!--TODO: i18n-->
+    <string-array name="languageArr">
+        <item>English</item>
+        <item>Русский</item>
+    </string-array>
+
+    <string-array name="languageVal">
+        <item>some language value</item>
+        <item>some language value</item>
+    </string-array>
+</resources>
