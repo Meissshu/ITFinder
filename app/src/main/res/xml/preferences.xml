@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--TODO: null default value-->
-    <MultiSelectListPreference
-        android:defaultValue="null"
+    <android.support.v14.preference.MultiSelectListPreference
+        android:defaultValue="@array/dataSourceVal_def"
         android:entries="@array/dataSourceArr"
         android:entryValues="@array/dataSourceVal"
         android:key="dataSourceListPref"
@@ -11,22 +11,22 @@
         android:summary="Sites to read"/>
 
     <!--TODO: hard coded strings-->
-    <PreferenceScreen
+    <android.support.v7.preference.PreferenceScreen
         android:key="notificationPrefScreen"
         android:title="Notification pref screen"
         android:summary="Notification control">
 
-        <EditTextPreference
+        <android.support.v7.preference.EditTextPreference
             android:summary="some summary"
             android:title="some title"
             android:key="some key"/>
-    </PreferenceScreen>
+    </android.support.v7.preference.PreferenceScreen>
 
-    <ListPreference
+    <android.support.v7.preference.ListPreference
         android:defaultValue="1"
         android:entries="@array/languageArr"
         android:entryValues="@array/languageVal"
         android:key="languageListPref"
         android:title="Language"
         android:summary="Language settings"/>
-</PreferenceScreen>
+</android.support.v7.preference.PreferenceScreen>

@@ -12,6 +12,12 @@
         <item>some url</item>
     </string-array>
 
+    <string-array name="dataSourceVal_def">
+        <item>some url</item>
+        <item>some url</item>
+        <item>some url</item>
+    </string-array>
+
     <!--TODO: i18n-->
     <string-array name="languageArr">
         <item>English</item>

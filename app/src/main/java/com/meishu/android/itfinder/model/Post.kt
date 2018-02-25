@@ -3,9 +3,7 @@ package com.meishu.android.itfinder.model
 /**
  * Created by Meishu on 18.02.2018.
  */
-data class Post(val title : String, val time : Long, val description : String, val imageUrl: String, val tags : Array<String>) {
-
-    // todo: val isLiked : Boolean
+data class Post(val title : String, val time : Long, val description : String, val imageUrl: String, val tags : Array<String>, val isLiked : Boolean = false) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

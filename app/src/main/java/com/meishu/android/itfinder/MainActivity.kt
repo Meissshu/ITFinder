@@ -1,6 +1,7 @@
 package com.meishu.android.itfinder
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -38,7 +39,11 @@ class MainActivity : AppCompatActivity() {
         tabLayout = findViewById(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager) // autorefresh?
 
+        setupPermissions()
+    }
 
+    private fun setupPermissions() = {
+        // TODO: load stuff from shared prefferences
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -60,6 +65,8 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.menu_settings -> {
                     Log.i("tag", "menu settings")
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    startActivity(intent)
                     true
                 }
 
