@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupPermissions() = {
+        PreferenceManager.setDefaultValues(applicationContext, R.xml.preferences, false)
         // TODO: load stuff from shared prefferences
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="unique">
 
     <!--TODO: null default value-->
     <android.support.v14.preference.MultiSelectListPreference
@@ -11,22 +12,25 @@
         android:summary="Sites to read"/>
 
     <!--TODO: hard coded strings-->
-    <android.support.v7.preference.PreferenceScreen
+    <PreferenceScreen
         android:key="notificationPrefScreen"
         android:title="Notification pref screen"
         android:summary="Notification control">
 
-        <android.support.v7.preference.EditTextPreference
-            android:summary="some summary"
-            android:title="some title"
-            android:key="some key"/>
-    </android.support.v7.preference.PreferenceScreen>
+        <ListPreference
+            android:defaultValue="russian value"
+            android:entries="@array/languageArr"
+            android:entryValues="@array/languageVal"
+            android:key="anotheron!"
+            android:title="Language"
+            android:summary="Language settings"/>
+    </PreferenceScreen>
 
-    <android.support.v7.preference.ListPreference
-        android:defaultValue="1"
+    <ListPreference
+        android:defaultValue="russian value"
         android:entries="@array/languageArr"
         android:entryValues="@array/languageVal"
         android:key="languageListPref"
         android:title="Language"
         android:summary="Language settings"/>
-</android.support.v7.preference.PreferenceScreen>
+</PreferenceScreen>

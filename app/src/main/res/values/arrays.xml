@@ -7,14 +7,14 @@
     </string-array>
 
     <string-array name="dataSourceVal">
-        <item>some url</item>
-        <item>some url</item>
+        <item>first url</item>
+        <item>second url</item>
         <item>some url</item>
     </string-array>
 
     <string-array name="dataSourceVal_def">
-        <item>some url</item>
-        <item>some url</item>
+        <item>first url</item>
+        <item>second url</item>
         <item>some url</item>
     </string-array>
 
@@ -25,7 +25,7 @@
     </string-array>
 
     <string-array name="languageVal">
-        <item>some language value</item>
-        <item>some language value</item>
+        <item>russian value</item>
+        <item>english value</item>
     </string-array>
 </resources>
