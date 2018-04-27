@@ -2,7 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="unique">
 
-    <!--TODO: null default value-->
     <android.support.v14.preference.MultiSelectListPreference
         android:defaultValue="@array/dataSourceVal_def"
         android:entries="@array/dataSourceArr"
@@ -14,8 +13,8 @@
     <!--TODO: hard coded strings-->
     <PreferenceScreen
         android:key="notificationPrefScreen"
-        android:title="Notification pref screen"
-        android:summary="Notification control">
+        android:title="@string/pref_title_notif_screen"
+        android:summary="@string/pref_sum_notif_screen">
 
         <ListPreference
             android:defaultValue="russian value"
@@ -31,6 +30,6 @@
         android:entries="@array/languageArr"
         android:entryValues="@array/languageVal"
         android:key="languageListPref"
-        android:title="Language"
-        android:summary="Language settings"/>
+        android:title="@string/pref_title_lang"
+        android:summary="@string/pref_sum_lang"/>
 </PreferenceScreen>

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ITFinder</string>
+    <string name="pref_title_lang">Language</string>
+    <string name="pref_sum_lang">Language settings</string>
+    <string name="pref_title_notif_screen">Notification pref screen</string>
+    <string name="pref_sum_notif_screen">Notification control</string>
 </resources>
