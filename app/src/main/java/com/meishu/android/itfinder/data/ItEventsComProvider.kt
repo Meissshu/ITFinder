@@ -1,5 +1,6 @@
 package com.meishu.android.itfinder.data
 
+import android.util.Log
 import com.meishu.android.itfinder.model.Post
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -8,7 +9,7 @@ import java.util.*
 
 class ItEventsComProvider {
 
-    companion object {
+     companion object {
         const val CSS_Q_SECTION_CLASS = ".section"
         const val CSS_Q_CONTAINER_CLASS = ".container"
         const val CSS_Q_IMAGE_PART_CLASS = ".event-list-item__image"
@@ -21,13 +22,13 @@ class ItEventsComProvider {
         val templates = ArrayList<Post>()
     }
 
-    fun provide() {
+    fun provide(tag : String) {
 
         var page = 0
         while (true) {
             try {
                 val doc = Jsoup.connect(URL_TO_CONNECT + PAGING + (++page)).get()
-                System.out.println("got")
+                Log.d(tag, "GOT!")
                 val container = doc.select(CSS_Q_CONTAINER_CLASS).get(2)
                 val section = container.select(CSS_Q_SECTION_CLASS).first()
                 val events = section.select(CSS_Q_EVENTS_CLASS)
@@ -43,7 +44,7 @@ class ItEventsComProvider {
             }
         }
 
-        System.out.println(templates.size)
+        Log.d(tag, templates.size.toString())
     }
 
     private fun generateTemplateFromEvent(event : Element) : Post {
@@ -56,10 +57,11 @@ class ItEventsComProvider {
     private fun fillTextPart(event : Element, template : Post) {
         try {
             val textPart = event.select(CSS_Q_TEXT_PART_CLASS).first()
-            textPart.select(CSS_Q_TITLE_CLASS).first()
+            val title = textPart.select(CSS_Q_TITLE_CLASS).first().childNode(0).toString()
             val date : Date = parseDate(textPart.select(CSS_Q_INFO_CLASS).first())
             val node = textPart.select(CSS_Q_INFO_CLASS).last().childNode(0)
             val place = node.toString().replace("\n", "")
+            template.title = title
             template.time = date.time
             template.place = place
         } catch (e : Exception) {
@@ -96,7 +98,7 @@ class ItEventsComProvider {
                 arr[0]
             }
         }
-        val df = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        val df = SimpleDateFormat("dd MMMM yyyy", Locale("ru"))
         return df.parse(date)
     }
 

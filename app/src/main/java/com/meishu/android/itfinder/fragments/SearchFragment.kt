@@ -16,7 +16,7 @@ import com.meishu.android.itfinder.model.Post
  */
 class SearchFragment : Fragment() {
 
-    val data : List<Post> = List(5) {Post("Title $it", it.toLong(), "Description $it", it.toString(), arrayOf("hello"))}
+    val data : List<Post> = List(5) {Post("Title $it", it.toLong(), "Description $it", it.toString())}
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.search_fragment, null)
