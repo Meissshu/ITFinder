@@ -17,12 +17,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.meishu.android.itfinder.R
 import com.meishu.android.itfinder.data.ItEventsComProvider
-import com.meishu.android.itfinder.data.ItEventsComProvider.Companion.templates
 import com.meishu.android.itfinder.data.ThumbnailDownloader
 import com.meishu.android.itfinder.data.ThumbnailDownloader.ThumbnailDownloadListener
+import com.meishu.android.itfinder.data.TimePadProvider
 import com.meishu.android.itfinder.model.Post
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Meishu on 18.02.2018.
@@ -34,10 +35,13 @@ class EventsFragment : Fragment() {
 
         private class FetchItems(val eventsFragment: EventsFragment) : AsyncTask<Unit, Unit, List<Post>>() {
 
-            override fun doInBackground(vararg p0: Unit): List<Post>? {
-               val provider = ItEventsComProvider()
-                provider.provide(TAG)
-                return templates
+            override fun doInBackground(vararg p0: Unit): List<Post> {
+                val provider = ItEventsComProvider()
+                val timepad = TimePadProvider()
+                val result = ArrayList<Post>()
+                result.addAll(timepad.fetchItems())
+                result.addAll(provider.provide(TAG))
+                return result
             }
 
             override fun onPostExecute(result: List<Post>) {
@@ -47,7 +51,7 @@ class EventsFragment : Fragment() {
         }
     }
 
-    var data : List<Post> = List(5) {Post("Title $it", it.toLong(), "Description $it", it.toString())}
+    var data : List<Post> = ArrayList()
     private lateinit var recycle : RecyclerView
     private lateinit var downloader : ThumbnailDownloader<PostHolder>
 
@@ -130,7 +134,7 @@ class EventsFragment : Fragment() {
 
     private inner class PostAdapter(val posts : List<Post>) : RecyclerView.Adapter<PostHolder>() {
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PostHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostHolder {
             val inflater = LayoutInflater.from(activity)
             val view = inflater.inflate(R.layout.post_template, parent, false)
             return PostHolder(view)

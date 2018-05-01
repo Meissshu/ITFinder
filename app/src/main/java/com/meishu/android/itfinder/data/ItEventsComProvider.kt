@@ -19,13 +19,14 @@ class ItEventsComProvider {
         const val CSS_Q_INFO_CLASS = ".event-list-item__info"
         const val CSS_Q_EVENTS_CLASS = ".event-list-item"
         const val PAGING = "/events?page="
-        val templates = ArrayList<Post>()
     }
 
-    fun provide(tag : String) {
+    private val templates = ArrayList<Post>()
+
+    fun provide(tag : String) : List<Post> {
 
         var page = 0
-        while (true) {
+        while (page < 1) {
             try {
                 val doc = Jsoup.connect(URL_TO_CONNECT + PAGING + (++page)).get()
                 Log.d(tag, "GOT!")
@@ -45,6 +46,7 @@ class ItEventsComProvider {
         }
 
         Log.d(tag, templates.size.toString())
+        return templates
     }
 
     private fun generateTemplateFromEvent(event : Element) : Post {
