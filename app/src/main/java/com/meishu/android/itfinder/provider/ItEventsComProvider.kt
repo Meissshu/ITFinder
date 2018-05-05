@@ -1,4 +1,4 @@
-package com.meishu.android.itfinder.data
+package com.meishu.android.itfinder.provider
 
 import android.util.Log
 import com.meishu.android.itfinder.model.Post
@@ -23,13 +23,13 @@ class ItEventsComProvider {
 
     private val templates = ArrayList<Post>()
 
-    fun provide(tag : String) : List<Post> {
+    fun provide() : List<Post> {
 
         var page = 0
         while (page < 1) {
             try {
                 val doc = Jsoup.connect(URL_TO_CONNECT + PAGING + (++page)).get()
-                Log.d(tag, "GOT!")
+                Log.d("IT EVENTS", "GOT!")
                 val container = doc.select(CSS_Q_CONTAINER_CLASS).get(2)
                 val section = container.select(CSS_Q_SECTION_CLASS).first()
                 val events = section.select(CSS_Q_EVENTS_CLASS)
@@ -45,7 +45,7 @@ class ItEventsComProvider {
             }
         }
 
-        Log.d(tag, templates.size.toString())
+        Log.d("IT EVENTS", templates.size.toString())
         return templates
     }
 

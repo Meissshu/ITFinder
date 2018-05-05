@@ -1,10 +1,9 @@
-package com.meishu.android.itfinder.data
+package com.meishu.android.itfinder.provider
 
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
 import com.meishu.android.itfinder.model.Post
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.IOException
