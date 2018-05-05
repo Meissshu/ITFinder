@@ -30,13 +30,11 @@ class Adapter(private val posts : List<Post>) : RecyclerView.Adapter<Adapter.Vie
 
         private val title : TextView = itemView.post_title
         private val time : TextView = itemView.post_time
-        private val description : TextView = itemView.post_description
         private val image : ImageView = itemView.post_image
 
         fun bind(item : Post) = with(itemView) {
             title.text = item.title
             time.text = item.time.toString()
-            description.text = item.description
             image.setImageResource(R.drawable.bfa8bb19)
             //image.loadUrl(item.imageUrl)
         }

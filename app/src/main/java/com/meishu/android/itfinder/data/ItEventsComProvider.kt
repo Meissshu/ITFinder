@@ -66,6 +66,7 @@ class ItEventsComProvider {
             template.title = title
             template.time = date.time
             template.place = place
+            template.source = URL_TO_CONNECT
         } catch (e : Exception) {
             e.printStackTrace()
         }

@@ -18,6 +18,7 @@ class TimePadProvider {
         const val TAG = "TimePad provider"
         //const val API_KEY = ""
         const val ROOT = "https://api.timepad.ru/v1/events"
+        const val SOURCE = "https://welcome.timepad.ru/"
     }
 
     fun getUrlString(url : String) = String(getUrlBytes(url))
@@ -32,7 +33,7 @@ class TimePadProvider {
                 throw IOException("${connection.responseMessage}: with $urlSource")
             }
 
-            var bytesRead = 0
+            var bytesRead: Int
             val buffer = ByteArray(1024)
             bytesRead = input.read(buffer)
             while (bytesRead > 0) {
@@ -77,7 +78,7 @@ class TimePadProvider {
             val title = jsonObject.getString("name")
             val href = jsonObject.getString("url")
             val imageUrl = "https://${jsonObject.getJSONObject("poster_image").getString("uploadcare_url")}"
-            val post = Post(title = title, time = time, href = href, imageUrl = imageUrl)
+            val post = Post(title = title, time = time, href = href, imageUrl = imageUrl, source = SOURCE)
             array.add(post)
         }
         return array

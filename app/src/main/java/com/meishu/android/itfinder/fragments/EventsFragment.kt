@@ -110,14 +110,14 @@ class EventsFragment : Fragment() {
 
         val title : TextView = item.findViewById(R.id.post_title)
         val time : TextView = item.findViewById(R.id.post_time)
-        val description : TextView = item.findViewById(R.id.post_description)
+        val source : TextView = item.findViewById(R.id.post_source_text)
         val image : ImageView = item.findViewById(R.id.post_image)
         val place : TextView = item.findViewById(R.id.post_place)
 
         fun bindPost(post : Post) {
             title.text = post.title
             time.text = longToDate(post.time)
-            description.text = post.description
+            source.text = post.source
             place.text = post.place
         }
 
