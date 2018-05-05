@@ -11,13 +11,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.meishu.android.itfinder.R
+import com.meishu.android.itfinder.data.PostAdapter
 import com.meishu.android.itfinder.data.ThumbnailDownloader
 import com.meishu.android.itfinder.data.ThumbnailDownloader.ThumbnailDownloadListener
 import com.meishu.android.itfinder.model.Post
-import kotlin.collections.ArrayList
-import com.meishu.android.itfinder.data.AsyncTaskFetch
-import com.meishu.android.itfinder.data.PostAdapter
 
 /**
  * Created by Meishu on 18.02.2018.
@@ -26,6 +23,7 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun provideLayout() : Int
     abstract fun provideTag() : String
+    abstract fun provideRecyclerTag() : Int
 
     var data : List<Post> = ArrayList()
     private lateinit var recycle : RecyclerView
@@ -51,7 +49,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(provideLayout(), null)
-        recycle = rootView.findViewById(R.id.recycler_view_events)
+        recycle = rootView.findViewById(provideRecyclerTag())
         val layoutManager = LinearLayoutManager(this.activity)
         val scrollPosition = (recycle.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition() ?: 0
 

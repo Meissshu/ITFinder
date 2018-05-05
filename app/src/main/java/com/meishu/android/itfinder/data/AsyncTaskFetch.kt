@@ -5,15 +5,21 @@ import com.meishu.android.itfinder.model.Post
 import com.meishu.android.itfinder.provider.ItEventsComProvider
 import com.meishu.android.itfinder.provider.TimePadProvider
 
-class AsyncTaskFetch : AsyncTask<Unit, Unit, List<Post>>() {
+class AsyncTaskFetch(private val query : String?) : AsyncTask<Unit, Unit, List<Post>>() {
 
     private var listener : DataPreparedListener? = null
 
     override fun doInBackground(vararg p0: Unit): List<Post> {
         val provider = ItEventsComProvider()
+
         val timepad = TimePadProvider()
         val result = ArrayList<Post>()
-        result.addAll(timepad.fetchItems())
+
+        when (query) {
+            null -> result.addAll(timepad.fetchPosts())
+            else -> result.addAll(timepad.searchPosts(query))
+        }
+
         result.addAll(provider.provide())
         return result
     }

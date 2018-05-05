@@ -18,9 +18,66 @@ class TimePadProvider {
         //const val API_KEY = ""
         const val ROOT = "https://api.timepad.ru/v1/events"
         const val SOURCE = "https://welcome.timepad.ru/"
+        val ENDPOINT: Uri = Uri.parse(ROOT)
+                .buildUpon()
+                .appendQueryParameter("limit", "10")
+                .appendQueryParameter("sort", "+starts_at")
+                .appendQueryParameter("category_ids", "452")
+                .build()
     }
 
-    fun getUrlString(url : String) = String(getUrlBytes(url))
+    fun fetchPosts() : List<Post> {
+        val url = buildUrl(null)
+        return downloadPosts(url)
+    }
+
+    fun searchPosts(query : String) : List<Post> {
+        val url = buildUrl(query)
+        return downloadPosts(url)
+    }
+
+    private fun downloadPosts(url : String) : List<Post> {
+        
+        var result : List<Post> = ArrayList()
+        try {
+            val jsonString = getUrlString(url)
+            result = parseJson(jsonString)
+            Log.i(TAG, "Got json!")
+        } catch (e : Exception) {
+            Log.i(TAG, "Failed!")
+            e.printStackTrace()
+        }
+        return result
+    }
+
+    private fun buildUrl(query : String?) : String {
+        val uriBuilder = ENDPOINT.buildUpon()
+        if (query != null) {
+            uriBuilder.appendQueryParameter("keywords", prepareQueryString(query))
+        }
+
+        return uriBuilder.toString()
+    }
+
+    private fun prepareQueryString(query: String): String = query.replace(" ", ",")
+
+    fun parseJson(jsonString : String) : List<Post> {
+        val jsonBody = JSONObject(jsonString)
+        val jsonValues = jsonBody.getJSONArray("values")
+        val array = ArrayList<Post>()
+        for (i in 0..(jsonValues.length() - 1)) {
+            val jsonObject = jsonValues.getJSONObject(i)
+            val time = dateStringToLong(jsonObject.getString("starts_at"))
+            val title = jsonObject.getString("name")
+            val href = jsonObject.getString("url")
+            val imageUrl = "https://${jsonObject.getJSONObject("poster_image").getString("uploadcare_url")}"
+            val post = Post(title = title, time = time, href = href, imageUrl = imageUrl, source = SOURCE)
+            array.add(post)
+        }
+        return array
+    }
+
+    private fun getUrlString(url : String) = String(getUrlBytes(url))
 
     private fun getUrlBytes(urlSource: String): ByteArray {
         val url = URL(urlSource)
@@ -47,44 +104,8 @@ class TimePadProvider {
         }
     }
 
-    fun fetchItems() : List<Post> {
-        val url = Uri.parse(ROOT)
-                .buildUpon()
-                .appendQueryParameter("limit", "10")
-                .appendQueryParameter("sort", "+starts_at")
-                .appendQueryParameter("category_ids", "452")
-                .build().toString()
-
-        var result : List<Post> = ArrayList()
-        try {
-            val jsonString = getUrlString(url)
-            result = parseJson(jsonString)
-            Log.i(TAG, "Got json!")
-        } catch (e : Exception) {
-            Log.i(TAG, "Failed!")
-            e.printStackTrace()
-        }
-        return result
-    }
-
-    fun parseJson(jsonString : String) : List<Post> {
-        val jsonBody = JSONObject(jsonString)
-        val jsonValues = jsonBody.getJSONArray("values")
-        val array = ArrayList<Post>()
-        for (i in 0..(jsonValues.length() - 1)) {
-            val jsonObject = jsonValues.getJSONObject(i)
-            val time = dateStringToLong(jsonObject.getString("starts_at"))
-            val title = jsonObject.getString("name")
-            val href = jsonObject.getString("url")
-            val imageUrl = "https://${jsonObject.getJSONObject("poster_image").getString("uploadcare_url")}"
-            val post = Post(title = title, time = time, href = href, imageUrl = imageUrl, source = SOURCE)
-            array.add(post)
-        }
-        return array
-    }
-
     @SuppressLint("SimpleDateFormat")
-    fun dateStringToLong(date : String) : Long {
+    private fun dateStringToLong(date : String) : Long {
         val df = SimpleDateFormat("yyyy-MM-dd")
         return df.parse(date).time
     }
