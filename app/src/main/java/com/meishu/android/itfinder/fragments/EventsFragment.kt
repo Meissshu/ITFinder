@@ -1,12 +1,13 @@
 package com.meishu.android.itfinder.fragments
 
+import android.app.Fragment
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -16,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.meishu.android.itfinder.R
+import com.meishu.android.itfinder.data.DataPreparedListener
 import com.meishu.android.itfinder.data.ItEventsComProvider
 import com.meishu.android.itfinder.data.ThumbnailDownloader
 import com.meishu.android.itfinder.data.ThumbnailDownloader.ThumbnailDownloadListener
@@ -33,7 +35,9 @@ class EventsFragment : Fragment() {
     companion object {
         const val TAG : String = "EventsFragment"
 
-        private class FetchItems(val eventsFragment: EventsFragment) : AsyncTask<Unit, Unit, List<Post>>() {
+        private class AsyncTaskFetch : AsyncTask<Unit, Unit, List<Post>>() {
+
+            private var listener : DataPreparedListener? = null
 
             override fun doInBackground(vararg p0: Unit): List<Post> {
                 val provider = ItEventsComProvider()
@@ -45,15 +49,19 @@ class EventsFragment : Fragment() {
             }
 
             override fun onPostExecute(result: List<Post>) {
-                eventsFragment.data = result
-                eventsFragment.setupAdapter()
+                listener?.retrieveNewData(result)
             }
+
+            fun setListener(listener : DataPreparedListener?) {
+                this.listener = listener
+            }
+
         }
     }
 
-    var data : List<Post> = ArrayList()
     private lateinit var recycle : RecyclerView
     private lateinit var downloader : ThumbnailDownloader<PostHolder>
+    private lateinit var asyncTask: AsyncTaskFetch
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.events_fragment, null)
@@ -63,7 +71,7 @@ class EventsFragment : Fragment() {
 
         recycle.layoutManager = layoutManager
         recycle.scrollToPosition(scrollPosition)
-        setupAdapter()
+        setupAdapter(ArrayList())
 
         return rootView
     }
@@ -71,9 +79,10 @@ class EventsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         downloader.clearQueue()
+        asyncTask.setListener(null)
     }
 
-    fun setupAdapter() {
+    fun setupAdapter(data : List<Post>) {
         if (isAdded) {
             val adapter = PostAdapter(data)
             recycle.adapter = adapter
@@ -83,7 +92,13 @@ class EventsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-        FetchItems(this).execute()
+        asyncTask = AsyncTaskFetch()
+        asyncTask.setListener(object : DataPreparedListener {
+            override fun retrieveNewData(data : List<Post>) {
+                setupAdapter(data)
+            }
+        })
+        asyncTask.execute()
 
         val responseHandler = Handler()
         downloader = ThumbnailDownloader(responseHandler)
@@ -106,19 +121,28 @@ class EventsFragment : Fragment() {
         Log.i(TAG, "Background thread stopped")
     }
 
-    private class PostHolder(item : View) : RecyclerView.ViewHolder(item) {
+    private inner class PostHolder(item : View) : RecyclerView.ViewHolder(item), View.OnClickListener {
 
         val title : TextView = item.findViewById(R.id.post_title)
         val time : TextView = item.findViewById(R.id.post_time)
         val source : TextView = item.findViewById(R.id.post_source_text)
         val image : ImageView = item.findViewById(R.id.post_image)
         val place : TextView = item.findViewById(R.id.post_place)
+        var url : String = ""
 
         fun bindPost(post : Post) {
             title.text = post.title
             time.text = longToDate(post.time)
             source.text = post.source
             place.text = post.place
+            url = post.href
+            image.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View) {
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse(url)
+            activity.startActivity(i)
         }
 
         fun bindDrawable(drawable: BitmapDrawable) {

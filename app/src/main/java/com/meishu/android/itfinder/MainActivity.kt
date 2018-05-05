@@ -1,13 +1,14 @@
 package com.meishu.android.itfinder
 
 
+import android.app.Fragment
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.support.v13.app.FragmentPagerAdapter
+import android.app.FragmentManager
 import android.support.v4.view.ViewPager
+
 
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.PreferenceManager
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setupViewPager(viewPager: ViewPager) {
-        val adapter = ViewPagerAdapter(supportFragmentManager)
+        val adapter = ViewPagerAdapter(fragmentManager)
         adapter.addFragment(EventsFragment(), "Events")
         adapter.addFragment(SearchFragment(), "Search")
         adapter.addFragment(LikedFragment(), "Liked")
