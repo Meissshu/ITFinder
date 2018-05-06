@@ -11,6 +11,14 @@
         android:text="NO DATA"
         android:layout_gravity="center"/>
 
+    <ImageView
+        android:id="@+id/events_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/progressbar_cat"
+        />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_events"
         android:layout_width="match_parent"

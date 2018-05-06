@@ -23,8 +23,8 @@ abstract class BaseFragment : Fragment() {
     abstract fun provideEmptyTextTag() : Int
 
     var data : List<Post> = ArrayList()
-    private lateinit var recycle : RecyclerView
-    private lateinit var emptyText : TextView
+     lateinit var recycle : RecyclerView
+     lateinit var emptyText : TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +64,7 @@ abstract class BaseFragment : Fragment() {
         return rootView
     }
 
-    fun setupAdapter() {
+    open fun setupAdapter() {
         if (isAdded) {
             val adapter = PostAdapter(data, activity)
             recycle.adapter = adapter
@@ -72,7 +72,7 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    private fun setupVisibility() {
+    open fun setupVisibility() {
         if (data.isEmpty()) {
             recycle.visibility = View.GONE
             emptyText.visibility = View.VISIBLE
