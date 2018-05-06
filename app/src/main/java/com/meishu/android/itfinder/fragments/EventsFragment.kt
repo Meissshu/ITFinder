@@ -10,6 +10,8 @@ import com.meishu.android.itfinder.model.Post
  * Created by Meishu on 18.02.2018.
  */
 class EventsFragment : BaseFragment() {
+    override fun provideEmptyTextTag(): Int = R.id.events_empty_data
+
     override fun provideRecyclerTag(): Int = R.id.recycler_view_events
 
     override fun provideTag(): String = "Events fragment"

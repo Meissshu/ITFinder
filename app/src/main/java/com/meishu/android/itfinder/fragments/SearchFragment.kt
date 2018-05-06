@@ -19,6 +19,7 @@ import com.meishu.android.itfinder.model.Post
  * Created by Meishu on 18.02.2018.
  */
 class SearchFragment : BaseFragment() {
+    override fun provideEmptyTextTag(): Int = R.id.search_empty_data
 
     override fun provideRecyclerTag(): Int = R.id.recycler_view_search
 

@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.meishu.android.itfinder.data.PostAdapter
 import com.meishu.android.itfinder.model.Post
 
@@ -19,9 +20,11 @@ abstract class BaseFragment : Fragment() {
     abstract fun provideLayout() : Int
     abstract fun provideTag() : String
     abstract fun provideRecyclerTag() : Int
+    abstract fun provideEmptyTextTag() : Int
 
     var data : List<Post> = ArrayList()
     private lateinit var recycle : RecyclerView
+    private lateinit var emptyText : TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +52,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(provideLayout(), null)
+        emptyText = rootView.findViewById(provideEmptyTextTag())
         recycle = rootView.findViewById(provideRecyclerTag())
         val layoutManager = LinearLayoutManager(this.activity)
         val scrollPosition = (recycle.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition() ?: 0
@@ -64,6 +68,17 @@ abstract class BaseFragment : Fragment() {
         if (isAdded) {
             val adapter = PostAdapter(data, activity)
             recycle.adapter = adapter
+            setupVisibility()
+        }
+    }
+
+    private fun setupVisibility() {
+        if (data.isEmpty()) {
+            recycle.visibility = View.GONE
+            emptyText.visibility = View.VISIBLE
+        } else {
+            recycle.visibility = View.VISIBLE
+            emptyText.visibility = View.GONE
         }
     }
 }
