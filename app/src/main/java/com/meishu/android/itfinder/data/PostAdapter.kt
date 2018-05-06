@@ -13,12 +13,13 @@ import android.widget.TextView
 import com.meishu.android.itfinder.R
 import com.meishu.android.itfinder.fragments.EventsFragment
 import com.meishu.android.itfinder.model.Post
+import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
 
 class PostAdapter(
         private val posts : List<Post>,
-        private val downloader: ThumbnailDownloader<PostHolder>,
+        //private val downloader: ThumbnailDownloader<PostHolder>,
         val context: Context
 ) : RecyclerView.Adapter<PostAdapter.PostHolder>() {
 
@@ -33,7 +34,7 @@ class PostAdapter(
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
         val post = posts[position]
         holder.bindPost(post)
-        downloader.queueThumbnail(holder, post.imageUrl)
+        //downloader.queueThumbnail(holder, post.imageUrl)
     }
 
     inner class PostHolder(item : View) : RecyclerView.ViewHolder(item), View.OnClickListener {
@@ -51,17 +52,23 @@ class PostAdapter(
             source.text = post.source
             place.text = post.place
             url = post.href
+            loadImageInto(post)
             image.setOnClickListener(this)
+        }
+
+        private fun loadImageInto(post: Post) {
+            Picasso
+                    .get()
+                    .load(post.imageUrl)
+                    .error(R.drawable.error_256)
+                    .placeholder(R.drawable.placeholder_256)
+                    .into(image)
         }
 
         override fun onClick(v: View) {
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse(url)
             context.startActivity(i)
-        }
-
-        fun bindDrawable(drawable: BitmapDrawable) {
-            image.setImageDrawable(drawable)
         }
 
         private fun longToDate(time : Long) : String {

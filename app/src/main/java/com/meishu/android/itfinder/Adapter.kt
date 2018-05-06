@@ -35,12 +35,8 @@ class Adapter(private val posts : List<Post>) : RecyclerView.Adapter<Adapter.Vie
         fun bind(item : Post) = with(itemView) {
             title.text = item.title
             time.text = item.time.toString()
-            image.setImageResource(R.drawable.bfa8bb19)
-            //image.loadUrl(item.imageUrl)
+            image.setImageResource(R.drawable.placeholder_256)
         }
     }
 }
 
-private fun ImageView.loadUrl(imageUrl: String) {
-    // todo: implement
-}

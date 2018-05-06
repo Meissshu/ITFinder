@@ -1,10 +1,7 @@
 package com.meishu.android.itfinder.fragments
 
 import android.app.Fragment
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -12,8 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.meishu.android.itfinder.data.PostAdapter
-import com.meishu.android.itfinder.data.ThumbnailDownloader
-import com.meishu.android.itfinder.data.ThumbnailDownloader.ThumbnailDownloadListener
 import com.meishu.android.itfinder.model.Post
 
 /**
@@ -27,12 +22,17 @@ abstract class BaseFragment : Fragment() {
 
     var data : List<Post> = ArrayList()
     private lateinit var recycle : RecyclerView
-    private lateinit var downloader : ThumbnailDownloader<PostAdapter.PostHolder>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
+        // setup()
+        Log.i(provideTag(), "Background thread started")
+    }
 
+    /*
+    fun setup() {
         val responseHandler = Handler()
         downloader = ThumbnailDownloader(responseHandler)
         downloader.thumbnailListener = object : ThumbnailDownloadListener<PostAdapter.PostHolder> {
@@ -44,8 +44,8 @@ abstract class BaseFragment : Fragment() {
 
         downloader.start()
         downloader.looper
-        Log.i(provideTag(), "Background thread started")
     }
+     */
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(provideLayout(), null)
@@ -60,20 +60,9 @@ abstract class BaseFragment : Fragment() {
         return rootView
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        downloader.clearQueue()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        downloader.quit()
-        Log.i(provideTag(), "Background thread stopped")
-    }
-
     fun setupAdapter() {
         if (isAdded) {
-            val adapter = PostAdapter(data, downloader, activity)
+            val adapter = PostAdapter(data, activity)
             recycle.adapter = adapter
         }
     }
