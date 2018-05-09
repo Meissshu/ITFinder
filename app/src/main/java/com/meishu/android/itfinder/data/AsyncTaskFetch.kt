@@ -1,6 +1,7 @@
 package com.meishu.android.itfinder.data
 
 import android.os.AsyncTask
+import com.meishu.android.itfinder.MainActivity
 import com.meishu.android.itfinder.model.Post
 import com.meishu.android.itfinder.provider.ItEventsComProvider
 import com.meishu.android.itfinder.provider.TimePadProvider
@@ -19,6 +20,9 @@ class AsyncTaskFetch(private val query : String?) : AsyncTask<Unit, Unit, List<P
             null -> {
                 result.addAll(timepad.fetchPosts())
                 result.addAll(provider.provide())
+            }
+            "db" -> {
+                result.addAll(MainActivity.data)
             }
             else -> {
                 result.addAll(timepad.searchPosts(query))

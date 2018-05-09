@@ -89,6 +89,21 @@ class MainActivity : AppCompatActivity() {
         adapter.addFragment(LikedFragment(), "Liked")
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 2
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                val fragment = adapter.getItem(position)
+                if (fragment is LikedFragment) {
+                    fragment.refresh()
+                }
+            }
+
+        })
     }
 
     class ViewPagerAdapter(manager : FragmentManager) : FragmentPagerAdapter(manager) {

@@ -29,8 +29,8 @@ class EventsFragment : BaseFragment() {
         val rootView : View = super.onCreateView(inflater, container, savedInstanceState)!!
 
         progressBar = rootView.findViewById(R.id.events_progress_bar)
-
         updateItems(null, progressBar)
+
         return rootView
     }
 

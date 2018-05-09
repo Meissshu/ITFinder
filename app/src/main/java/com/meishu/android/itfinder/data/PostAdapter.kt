@@ -57,14 +57,13 @@ class PostAdapter(
             url = post.href
 
             image.setOnClickListener(this)
+            like.isChecked = MainActivity.data.contains(post)
             like.setOnCheckedChangeListener { _, isChecked ->
                 when (isChecked) {
                     true -> MainActivity.data.add(post)
                     false -> MainActivity.data.remove(post)
                 }
             }
-
-            like.isChecked = MainActivity.data.contains(post)
 
             loadImageInto(post)
         }
