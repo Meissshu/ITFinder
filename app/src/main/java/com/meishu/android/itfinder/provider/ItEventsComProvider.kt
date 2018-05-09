@@ -9,7 +9,7 @@ import java.util.*
 
 class ItEventsComProvider {
 
-     companion object {
+    companion object {
         const val CSS_Q_SECTION_CLASS = ".section"
         const val CSS_Q_CONTAINER_CLASS = ".container"
         const val CSS_Q_IMAGE_PART_CLASS = ".event-list-item__image"
@@ -19,27 +19,43 @@ class ItEventsComProvider {
         const val CSS_Q_INFO_CLASS = ".event-list-item__info"
         const val CSS_Q_EVENTS_CLASS = ".event-list-item"
         const val PAGING = "/events?page="
+        const val THRESHOLD = 10
     }
 
     private val templates = ArrayList<Post>()
 
-    fun provide() : List<Post> {
-
+    private fun provide(query: String?): List<Post> {
         var page = 0
-        while (page < 1) {
+        var isDone = false
+
+        while (!isDone) {
             try {
                 val doc = Jsoup.connect(URL_TO_CONNECT + PAGING + (++page)).get()
                 Log.d("IT EVENTS", "GOT!")
-                val container = doc.select(CSS_Q_CONTAINER_CLASS).get(2)
+                val container = doc.select(CSS_Q_CONTAINER_CLASS)[2]
                 val section = container.select(CSS_Q_SECTION_CLASS).first()
                 val events = section.select(CSS_Q_EVENTS_CLASS)
+
                 if (events.size == 0) {
                     break
                 }
+
                 for (event in events) {
-                    templates.add(generateTemplateFromEvent(event))
+                    if (templates.size >= THRESHOLD) {
+                        isDone = true
+                        break
+                    }
+
+                    val post = generateTemplateFromEvent(event)
+
+                    when {
+                        query != null -> when {
+                            postMatches(post, query) -> templates.add(post)
+                        }
+                        else -> templates.add(post)
+                    }
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 break
             }
@@ -49,31 +65,44 @@ class ItEventsComProvider {
         return templates
     }
 
-    private fun generateTemplateFromEvent(event : Element) : Post {
+    private fun postMatches(post: Post, query: String): Boolean =
+            post.title.contains(query, true) ||
+            post.source.contains(query, true) ||
+            post.place.contains(query, true)
+
+    fun fetchPosts(): List<Post> {
+        return provide(null)
+    }
+
+    fun searchPosts(query: String): List<Post> {
+        return provide(query)
+    }
+
+    private fun generateTemplateFromEvent(event: Element): Post {
         val template = Post()
         fillImagePart(event, template)
         fillTextPart(event, template)
         return template
     }
 
-    private fun fillTextPart(event : Element, template : Post) {
+    private fun fillTextPart(event: Element, template: Post) {
         try {
             val textPart = event.select(CSS_Q_TEXT_PART_CLASS).first()
             val title = textPart.select(CSS_Q_TITLE_CLASS).first().childNode(0).toString()
-            val date : Date = parseDate(textPart.select(CSS_Q_INFO_CLASS).first())
+            val date: Date = parseDate(textPart.select(CSS_Q_INFO_CLASS).first())
             val node = textPart.select(CSS_Q_INFO_CLASS).last().childNode(0)
             val place = node.toString().replace("\n", "")
             template.title = title
             template.time = date.time
             template.place = place
             template.source = URL_TO_CONNECT
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
     }
 
-    private fun fillImagePart(event : Element, template : Post) {
+    private fun fillImagePart(event: Element, template: Post) {
         try {
             val imagePart = event.select(CSS_Q_IMAGE_PART_CLASS).first()
             val href = URL_TO_CONNECT + imagePart.attr("href")
@@ -82,12 +111,12 @@ class ItEventsComProvider {
             attr = URL_TO_CONNECT + attr
             template.href = href
             template.imageUrl = attr
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             System.out.println("RUNTIME! №: " + templates.size)
         }
     }
 
-    private fun  parseDate(element : Element) : Date {
+    private fun parseDate(element: Element): Date {
         var date = element.childNode(0).toString()
         date = date.replace("\n", "")
         val regex = " - "
@@ -105,7 +134,7 @@ class ItEventsComProvider {
         return df.parse(date)
     }
 
-    private fun indexOfFirstLetter(source : String) : Int {
+    private fun indexOfFirstLetter(source: String): Int {
         val arr = source.toCharArray()
         for (i in arr.indices) {
             if ((arr[i] < '0') || (arr[i] > '9')) {
@@ -115,7 +144,7 @@ class ItEventsComProvider {
         return -1
     }
 
-    private fun indexOfFirstDigit(source : String) : Int {
+    private fun indexOfFirstDigit(source: String): Int {
         val arr = source.toCharArray()
         for (i in arr.indices) {
             if ((arr[i] >= '0') && (arr[i] <= '9')) {

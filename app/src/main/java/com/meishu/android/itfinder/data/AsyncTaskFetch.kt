@@ -19,13 +19,14 @@ class AsyncTaskFetch(private val query : String?) : AsyncTask<Unit, Unit, List<P
         when (query) {
             null -> {
                 result.addAll(timepad.fetchPosts())
-                result.addAll(provider.provide())
+                result.addAll(provider.fetchPosts())
             }
             "db" -> {
                 result.addAll(MainActivity.data)
             }
             else -> {
                 result.addAll(timepad.searchPosts(query))
+                result.addAll(provider.searchPosts(query))
             }
         }
 
