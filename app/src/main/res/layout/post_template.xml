@@ -36,13 +36,18 @@
                     android:layout_below="@+id/post_title"
                     android:text="t:i:m:e" />
 
-                <ImageButton
+                <ToggleButton
                     android:id="@+id/post_like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    app:srcCompat="@android:drawable/btn_star_big_on" />
+                    android:drawableEnd="@drawable/like_button"
+                    android:background="@null"
+                    android:textOn=""
+                    android:textOff=""
+                    android:focusable="false"
+                    android:focusableInTouchMode="false" />
             </RelativeLayout>
 
             <ImageView
@@ -54,8 +59,9 @@
                 android:clickable="false"
                 android:cropToPadding="false"
                 android:foregroundGravity="center_vertical"
-                android:scaleType="centerCrop"/>
-              <!--  app:srcCompat="@drawable/bfa8bb19" -->
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/placeholder_256"/>
+
 
             <TextView
                 android:id="@+id/post_place"
