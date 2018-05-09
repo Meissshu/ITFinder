@@ -31,7 +31,6 @@ abstract class BaseFragment : Fragment() {
         super.onCreate(savedInstanceState)
         retainInstance = true
         // setup()
-        Log.i(provideTag(), "Background thread started")
     }
 
     /*
@@ -59,12 +58,12 @@ abstract class BaseFragment : Fragment() {
 
         recycle.layoutManager = layoutManager
         recycle.scrollToPosition(scrollPosition)
-        setupAdapter()
+        updateAdapter()
 
         return rootView
     }
 
-    open fun setupAdapter() {
+    open fun updateAdapter() {
         if (isAdded) {
             val adapter = PostAdapter(data, activity)
             recycle.adapter = adapter

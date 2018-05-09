@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.SearchView
 import com.meishu.android.itfinder.R
 import com.meishu.android.itfinder.data.AsyncTaskFetch
@@ -29,14 +30,16 @@ class SearchFragment : BaseFragment() {
 
     private lateinit var asyncTask: AsyncTaskFetch
     private lateinit var searchItem : SearchView
+    private lateinit var progressBar: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateItems()
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view : View = super.onCreateView(inflater, container, savedInstanceState)!!
+
         searchItem = view.findViewById(R.id.search_view)
         searchItem.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -53,9 +56,11 @@ class SearchFragment : BaseFragment() {
             }
 
         })
-
         searchItem.setOnSearchClickListener { searchItem.setQuery(QueryPreferences.getStoredQuery(activity), false) }
 
+        progressBar = view.findViewById(R.id.search_progress_bar)
+
+        updateItems()
         return view
     }
 
@@ -69,11 +74,13 @@ class SearchFragment : BaseFragment() {
     }
 
     private fun updateItems() {
+        setupVisibilityWhileFetching()
         asyncTask = AsyncTaskFetch(QueryPreferences.getStoredQuery(activity))
         asyncTask.setListener(object : DataPreparedListener {
             override fun retrieveNewData(data: List<Post>) {
                 this@SearchFragment.data = data
-                setupAdapter()
+                updateAdapter()
+                progressBar.visibility = View.GONE
             }
         })
         asyncTask.execute()
@@ -84,4 +91,9 @@ class SearchFragment : BaseFragment() {
         asyncTask.setListener(null)
     }
 
+    fun setupVisibilityWhileFetching() {
+        progressBar.visibility = View.VISIBLE
+        emptyText.visibility = View.GONE
+        recycle.visibility = View.GONE
+    }
 }

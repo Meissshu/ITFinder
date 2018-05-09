@@ -16,11 +16,16 @@ class AsyncTaskFetch(private val query : String?) : AsyncTask<Unit, Unit, List<P
         val result = ArrayList<Post>()
 
         when (query) {
-            null -> result.addAll(timepad.fetchPosts())
-            else -> result.addAll(timepad.searchPosts(query))
+            null -> {
+                result.addAll(timepad.fetchPosts())
+                result.addAll(provider.provide())
+            }
+            else -> {
+                result.addAll(timepad.searchPosts(query))
+            }
         }
 
-        result.addAll(provider.provide())
+
         return result
     }
 

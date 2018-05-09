@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         adapter.addFragment(SearchFragment(), "Search")
         adapter.addFragment(LikedFragment(), "Liked")
         viewPager.adapter = adapter
+        viewPager.offscreenPageLimit = 2
     }
 
     class ViewPagerAdapter(manager : FragmentManager) : FragmentPagerAdapter(manager) {
