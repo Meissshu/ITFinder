@@ -30,6 +30,7 @@ class AsyncTaskFetch(private val query : String?) : AsyncTask<Unit, Unit, List<P
             }
         }
 
+        result.sortByDescending { post -> post.time}
 
         return result
     }

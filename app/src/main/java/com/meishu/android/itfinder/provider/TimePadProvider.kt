@@ -23,6 +23,7 @@ class TimePadProvider {
                 .appendQueryParameter("limit", "10")
                 .appendQueryParameter("sort", "+starts_at")
                 .appendQueryParameter("category_ids", "452")
+                .appendQueryParameter("fields", "location")
                 .build()
     }
 
@@ -61,7 +62,7 @@ class TimePadProvider {
 
     private fun prepareQueryString(query: String): String = query.replace(" ", ",")
 
-    fun parseJson(jsonString : String) : List<Post> {
+    private fun parseJson(jsonString : String) : List<Post> {
         val jsonBody = JSONObject(jsonString)
         val jsonValues = jsonBody.getJSONArray("values")
         val array = ArrayList<Post>()
@@ -71,10 +72,31 @@ class TimePadProvider {
             val title = jsonObject.getString("name")
             val href = jsonObject.getString("url")
             val imageUrl = "https://${jsonObject.getJSONObject("poster_image").getString("uploadcare_url")}"
-            val post = Post(title = title, time = time, href = href, imageUrl = imageUrl, source = SOURCE)
+            val place = parseLocation(jsonObject)
+            val post = Post(title = title, time = time, href = href, imageUrl = imageUrl, source = SOURCE, place = place)
             array.add(post)
         }
         return array
+    }
+
+    private fun parseLocation(jsonObject : JSONObject) : String {
+        val stringBuilder = StringBuilder("")
+        try {
+            val locationObject = jsonObject.getJSONObject("location")
+
+            var string = locationObject.getString("country")
+            stringBuilder.append(string)
+
+            string = locationObject.getString("city")
+            stringBuilder.append(", ").append(string)
+
+            string = locationObject.getString("address")
+            stringBuilder.append(", ").append(string)
+        } catch (e : Exception) {
+            e.printStackTrace()
+        }
+
+        return stringBuilder.toString()
     }
 
     private fun getUrlString(url : String) = String(getUrlBytes(url))
