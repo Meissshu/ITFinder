@@ -4,11 +4,13 @@ import android.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import com.meishu.android.itfinder.data.AsyncTaskFetch
+import com.meishu.android.itfinder.data.DataPreparedListener
 import com.meishu.android.itfinder.data.PostAdapter
 import com.meishu.android.itfinder.model.Post
 
@@ -23,8 +25,9 @@ abstract class BaseFragment : Fragment() {
     abstract fun provideEmptyTextTag() : Int
 
     var data : List<Post> = ArrayList()
-     lateinit var recycle : RecyclerView
-     lateinit var emptyText : TextView
+    lateinit var recycle : RecyclerView
+    lateinit var emptyText : TextView
+    private lateinit var asyncTask: AsyncTaskFetch
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,15 +66,15 @@ abstract class BaseFragment : Fragment() {
         return rootView
     }
 
-    open fun updateAdapter() {
+     fun updateAdapter() {
         if (isAdded) {
             val adapter = PostAdapter(data, activity)
             recycle.adapter = adapter
-            setupVisibility()
+            setupVisibilityAfterFetching()
         }
     }
 
-    open fun setupVisibility() {
+     private fun setupVisibilityAfterFetching() {
         if (data.isEmpty()) {
             recycle.visibility = View.GONE
             emptyText.visibility = View.VISIBLE
@@ -79,5 +82,28 @@ abstract class BaseFragment : Fragment() {
             recycle.visibility = View.VISIBLE
             emptyText.visibility = View.GONE
         }
+    }
+
+     fun updateItems(query : String?, progressBar : ImageView) {
+        setupVisibilityWhileFetching(progressBar)
+        asyncTask = AsyncTaskFetch(query)
+        asyncTask.setListener(object : DataPreparedListener {
+            override fun retrieveNewData(data: List<Post>) {
+                this@BaseFragment.data = data
+                updateAdapter()
+                progressBar.visibility = View.GONE
+            }
+        })
+        asyncTask.execute()
+    }
+
+    private fun setupVisibilityWhileFetching(progressBar: ImageView) {
+        progressBar.visibility = View.VISIBLE
+        emptyText.visibility = View.GONE
+        recycle.visibility = View.GONE
+    }
+
+    fun removeAsyncListener() {
+        asyncTask.setListener(null)
     }
 }

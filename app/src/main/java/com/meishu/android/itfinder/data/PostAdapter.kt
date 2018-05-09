@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.ToggleButton
+import com.meishu.android.itfinder.MainActivity
 import com.meishu.android.itfinder.R
 import com.meishu.android.itfinder.fragments.EventsFragment
 import com.meishu.android.itfinder.model.Post
@@ -44,6 +46,7 @@ class PostAdapter(
         private val source : TextView = item.findViewById(R.id.post_source_text)
         private val image : ImageView = item.findViewById(R.id.post_image)
         private val place : TextView = item.findViewById(R.id.post_place)
+        private val like : ToggleButton = item.findViewById(R.id.post_like)
         private var url : String = ""
 
         fun bindPost(post : Post) {
@@ -52,8 +55,18 @@ class PostAdapter(
             source.text = post.source
             place.text = post.place
             url = post.href
-            loadImageInto(post)
+
             image.setOnClickListener(this)
+            like.setOnCheckedChangeListener { _, isChecked ->
+                when (isChecked) {
+                    true -> MainActivity.data.add(post)
+                    false -> MainActivity.data.remove(post)
+                }
+            }
+
+            like.isChecked = MainActivity.data.contains(post)
+
+            loadImageInto(post)
         }
 
         private fun loadImageInto(post: Post) {

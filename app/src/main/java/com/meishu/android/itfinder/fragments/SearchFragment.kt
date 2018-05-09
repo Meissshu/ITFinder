@@ -28,7 +28,7 @@ class SearchFragment : BaseFragment() {
 
     override fun provideLayout(): Int = R.layout.search_fragment
 
-    private lateinit var asyncTask: AsyncTaskFetch
+
     private lateinit var searchItem : SearchView
     private lateinit var progressBar: ImageView
 
@@ -40,12 +40,15 @@ class SearchFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view : View = super.onCreateView(inflater, container, savedInstanceState)!!
 
+        progressBar = view.findViewById(R.id.search_progress_bar)
+        updateItems(QueryPreferences.getStoredQuery(activity), progressBar)
+
         searchItem = view.findViewById(R.id.search_view)
         searchItem.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 Log.d(provideTag(), "QueryTextSubmit: $query")
                 QueryPreferences.setStoredQuery(activity, query)
-                updateItems()
+                updateItems(QueryPreferences.getStoredQuery(activity), progressBar)
                 closeKeyboard()
                 return true
             }
@@ -58,9 +61,6 @@ class SearchFragment : BaseFragment() {
         })
         searchItem.setOnSearchClickListener { searchItem.setQuery(QueryPreferences.getStoredQuery(activity), false) }
 
-        progressBar = view.findViewById(R.id.search_progress_bar)
-
-        updateItems()
         return view
     }
 
@@ -73,27 +73,9 @@ class SearchFragment : BaseFragment() {
         }
     }
 
-    private fun updateItems() {
-        setupVisibilityWhileFetching()
-        asyncTask = AsyncTaskFetch(QueryPreferences.getStoredQuery(activity))
-        asyncTask.setListener(object : DataPreparedListener {
-            override fun retrieveNewData(data: List<Post>) {
-                this@SearchFragment.data = data
-                updateAdapter()
-                progressBar.visibility = View.GONE
-            }
-        })
-        asyncTask.execute()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
-        asyncTask.setListener(null)
+        removeAsyncListener()
     }
 
-    fun setupVisibilityWhileFetching() {
-        progressBar.visibility = View.VISIBLE
-        emptyText.visibility = View.GONE
-        recycle.visibility = View.GONE
-    }
 }

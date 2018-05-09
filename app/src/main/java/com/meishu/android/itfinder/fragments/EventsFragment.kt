@@ -22,39 +22,20 @@ class EventsFragment : BaseFragment() {
 
     override fun provideLayout(): Int = R.layout.events_fragment
 
-    private lateinit var asyncTask: AsyncTaskFetch
     private lateinit var progressBar: ImageView
 
-    private fun updateItems() {
-        setupVisibilityWhileFetching()
-        asyncTask = AsyncTaskFetch(null)
-        asyncTask.setListener(object : DataPreparedListener {
-            override fun retrieveNewData(data: List<Post>) {
-                this@EventsFragment.data = data
-                updateAdapter()
-                progressBar.visibility = View.GONE
-            }
-        })
-        asyncTask.execute()
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView : View = super.onCreateView(inflater, container, savedInstanceState)!!
 
         progressBar = rootView.findViewById(R.id.events_progress_bar)
 
-        updateItems()
+        updateItems(null, progressBar)
         return rootView
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        asyncTask.setListener(null)
-    }
-
-    fun setupVisibilityWhileFetching() {
-        progressBar.visibility = View.VISIBLE
-        emptyText.visibility = View.GONE
-        recycle.visibility = View.GONE
+        removeAsyncListener()
     }
 }

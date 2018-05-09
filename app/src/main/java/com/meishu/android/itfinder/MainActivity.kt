@@ -19,8 +19,13 @@ import android.view.MenuItem
 import com.meishu.android.itfinder.fragments.EventsFragment
 import com.meishu.android.itfinder.fragments.LikedFragment
 import com.meishu.android.itfinder.fragments.SearchFragment
+import com.meishu.android.itfinder.model.Post
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        val data = ArrayList<Post>()
+    }
 
     private lateinit var toolbar: Toolbar
     private lateinit var tabLayout: TabLayout
