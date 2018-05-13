@@ -10,18 +10,19 @@ import com.meishu.android.itfinder.provider.ItEventsComProvider
 import com.meishu.android.itfinder.provider.Provider
 import com.meishu.android.itfinder.provider.TimePadProvider
 
-class DataCenter(resources: Resources, sharedPrefs: SharedPreferences) {
+class DataCenter(sharedPrefs: SharedPreferences, resources: Resources) {
 
     companion object {
         const val SOURCE_KEY = "dataSourceListPref"
         private val sources = ArrayList<Provider>()
+        private lateinit var allSources: Map<String, Provider>
 
-        fun addSource(provider: Provider) {
-            sources.add(provider)
-        }
-
-        fun removeSource(provider: Provider) {
-            sources.remove(provider)
+        fun updateWithNewSet(preferences: SharedPreferences) {
+            sources.clear()
+            val selections = preferences.getStringSet(SOURCE_KEY, null)
+            for (name in selections) {
+                sources.add(allSources[name]!!)
+            }
         }
 
         fun provideData(query: String?): List<Post> {
@@ -56,15 +57,10 @@ class DataCenter(resources: Resources, sharedPrefs: SharedPreferences) {
     }
 
     init {
-        val allSources = mapOf(
+        allSources = mapOf(
                 resources.getString(R.string.it_events) to ItEventsComProvider(),
                 resources.getString(R.string.timepad) to TimePadProvider()
         )
-
-        val selections = sharedPrefs.getStringSet(SOURCE_KEY, null)
-        for (name in selections) {
-            sources.add(allSources[name]!!)
-        }
+        updateWithNewSet(sharedPrefs)
     }
-
 }

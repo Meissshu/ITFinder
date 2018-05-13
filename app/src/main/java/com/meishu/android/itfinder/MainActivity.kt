@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupPermissions()  {
         PreferenceManager.setDefaultValues(applicationContext, R.xml.preferences, false)
-        dataCenter = DataCenter(resources, PreferenceManager.getDefaultSharedPreferences(this))
+        dataCenter = DataCenter(PreferenceManager.getDefaultSharedPreferences(this), resources)
         // TODO: load stuff from shared prefferences
     }
 
