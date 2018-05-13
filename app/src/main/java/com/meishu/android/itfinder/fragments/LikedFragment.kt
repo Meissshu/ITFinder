@@ -12,6 +12,10 @@ import com.meishu.android.itfinder.R
  */
 class LikedFragment : BaseFragment() {
 
+    companion object {
+        const val LIKED_QUERY = "db_fetch_liked_post_query"
+    }
+
     override fun provideEmptyTextTag(): Int = R.id.liked_empty_data
 
     override fun provideLayout(): Int = R.layout.liked_fragment
@@ -22,7 +26,7 @@ class LikedFragment : BaseFragment() {
     private lateinit var progressBar: ImageView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView : View = super.onCreateView(inflater, container, savedInstanceState)!!
+        val rootView: View = super.onCreateView(inflater, container, savedInstanceState)!!
 
         progressBar = rootView.findViewById(R.id.liked_progress_bar)
         refresh()
@@ -31,7 +35,7 @@ class LikedFragment : BaseFragment() {
     }
 
     fun refresh() {
-        updateItems("db", progressBar)
+        updateItems(LIKED_QUERY, progressBar)
     }
 
 }

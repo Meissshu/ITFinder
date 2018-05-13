@@ -2,14 +2,12 @@ package com.meishu.android.itfinder
 
 
 import android.app.Fragment
+import android.app.FragmentManager
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v13.app.FragmentPagerAdapter
-import android.app.FragmentManager
 import android.support.v4.view.ViewPager
-
-
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.Toolbar
@@ -19,13 +17,8 @@ import android.view.MenuItem
 import com.meishu.android.itfinder.fragments.EventsFragment
 import com.meishu.android.itfinder.fragments.LikedFragment
 import com.meishu.android.itfinder.fragments.SearchFragment
-import com.meishu.android.itfinder.model.Post
 
 class MainActivity : AppCompatActivity() {
-
-    companion object {
-        val data = ArrayList<Post>()
-    }
 
     private lateinit var toolbar: Toolbar
     private lateinit var tabLayout: TabLayout
@@ -89,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         adapter.addFragment(LikedFragment(), "Liked")
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 2
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
 
@@ -106,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    class ViewPagerAdapter(manager : FragmentManager) : FragmentPagerAdapter(manager) {
+    class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
 
         private val fragmentList = ArrayList<Fragment>()
         private val fragmentTitleList = ArrayList<String>()
@@ -117,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun getPageTitle(position: Int): CharSequence = fragmentTitleList[position]
 
-        fun addFragment(fragment: Fragment, title : String) {
+        fun addFragment(fragment: Fragment, title: String) {
             fragmentList.add(fragment)
             fragmentTitleList.add(title)
         }

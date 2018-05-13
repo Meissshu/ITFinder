@@ -1,14 +1,15 @@
 package com.meishu.android.itfinder.data
 
 import android.os.AsyncTask
-import com.meishu.android.itfinder.MainActivity
+import com.meishu.android.itfinder.DB.PostRepository
+import com.meishu.android.itfinder.fragments.LikedFragment
 import com.meishu.android.itfinder.model.Post
 import com.meishu.android.itfinder.provider.ItEventsComProvider
 import com.meishu.android.itfinder.provider.TimePadProvider
 
-class AsyncTaskFetch(private val query : String?) : AsyncTask<Unit, Unit, List<Post>>() {
+class AsyncTaskFetch(private val query: String?) : AsyncTask<Unit, Unit, List<Post>>() {
 
-    private var listener : DataPreparedListener? = null
+    private var listener: DataPreparedListener? = null
 
     override fun doInBackground(vararg p0: Unit): List<Post> {
         val provider = ItEventsComProvider()
@@ -21,16 +22,18 @@ class AsyncTaskFetch(private val query : String?) : AsyncTask<Unit, Unit, List<P
                 result.addAll(timepad.fetchPosts())
                 result.addAll(provider.fetchPosts())
             }
-            "db" -> {
-                result.addAll(MainActivity.data)
+
+            LikedFragment.LIKED_QUERY -> {
+                result.addAll(PostRepository.getAll())
             }
+
             else -> {
                 result.addAll(timepad.searchPosts(query))
                 result.addAll(provider.searchPosts(query))
             }
         }
 
-        result.sortByDescending { post -> post.time}
+        result.sortByDescending { post -> post.time }
 
         return result
     }
@@ -39,7 +42,7 @@ class AsyncTaskFetch(private val query : String?) : AsyncTask<Unit, Unit, List<P
         listener?.retrieveNewData(result)
     }
 
-    fun setListener(listener : DataPreparedListener?) {
+    fun setListener(listener: DataPreparedListener?) {
         this.listener = listener
     }
 
