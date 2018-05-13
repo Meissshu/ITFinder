@@ -4,18 +4,19 @@ import android.content.Context
 import android.preference.PreferenceManager
 
 object QueryPreferences {
-    private const val PREF_SEARCH_QUERY = "searchQuery"
+    const val PREF_SEARCH_QUERY = "searchQuery"
+    const val PREF_TRACKED_QUERY = "trackedQuery"
 
-    fun getStoredQuery(context: Context): String? =
+    fun getStoredQuery(context: Context, type: String): String? =
             PreferenceManager
                     .getDefaultSharedPreferences(context)
-                    .getString(PREF_SEARCH_QUERY, null)
+                    .getString(type, null)
 
-    fun setStoredQuery(context: Context, query: String) =
+    fun setStoredQuery(context: Context, type: String, query: String) =
             PreferenceManager
                     .getDefaultSharedPreferences(context)
                     .edit()
-                    .putString(PREF_SEARCH_QUERY, query)
+                    .putString(type, query)
                     .apply()
 }
 

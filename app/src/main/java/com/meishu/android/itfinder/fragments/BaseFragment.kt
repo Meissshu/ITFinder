@@ -20,7 +20,6 @@ import com.meishu.android.itfinder.model.Post
 abstract class BaseFragment : Fragment() {
 
     abstract fun provideLayout() : Int
-    abstract fun provideTag() : String
     abstract fun provideRecyclerTag() : Int
     abstract fun provideEmptyTextTag() : Int
 

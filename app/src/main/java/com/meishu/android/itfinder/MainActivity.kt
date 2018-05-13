@@ -17,6 +17,7 @@ import android.view.MenuItem
 import com.meishu.android.itfinder.fragments.EventsFragment
 import com.meishu.android.itfinder.fragments.LikedFragment
 import com.meishu.android.itfinder.fragments.SearchFragment
+import com.meishu.android.itfinder.fragments.TrackedFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -80,8 +81,9 @@ class MainActivity : AppCompatActivity() {
         adapter.addFragment(EventsFragment(), "Events")
         adapter.addFragment(SearchFragment(), "Search")
         adapter.addFragment(LikedFragment(), "Liked")
+        adapter.addFragment(TrackedFragment(), "Tracked")
         viewPager.adapter = adapter
-        viewPager.offscreenPageLimit = 2
+        viewPager.offscreenPageLimit = 3
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }

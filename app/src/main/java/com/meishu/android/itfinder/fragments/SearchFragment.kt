@@ -24,8 +24,6 @@ class SearchFragment : BaseFragment() {
 
     override fun provideRecyclerTag(): Int = R.id.recycler_view_search
 
-    override fun provideTag(): String = "SearchFragment"
-
     override fun provideLayout(): Int = R.layout.search_fragment
 
 
@@ -36,25 +34,25 @@ class SearchFragment : BaseFragment() {
         val view : View = super.onCreateView(inflater, container, savedInstanceState)!!
 
         progressBar = view.findViewById(R.id.search_progress_bar)
-        updateItems(QueryPreferences.getStoredQuery(activity), progressBar)
+        updateItems(QueryPreferences.getStoredQuery(activity, QueryPreferences.PREF_SEARCH_QUERY), progressBar)
 
         searchItem = view.findViewById(R.id.search_view)
         searchItem.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                Log.d(provideTag(), "QueryTextSubmit: $query")
-                QueryPreferences.setStoredQuery(activity, query)
-                updateItems(QueryPreferences.getStoredQuery(activity), progressBar)
+                Log.d("EVENTS FRAGMENT", "QueryTextSubmit: $query")
+                QueryPreferences.setStoredQuery(activity, QueryPreferences.PREF_SEARCH_QUERY, query)
+                updateItems(QueryPreferences.getStoredQuery(activity, QueryPreferences.PREF_SEARCH_QUERY), progressBar)
                 closeKeyboard()
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                Log.d(provideTag(), "QueryTextChange: $newText")
+                Log.d("EVENTS FRAGMENT", "QueryTextChange: $newText")
                 return false
             }
 
         })
-        searchItem.setOnSearchClickListener { searchItem.setQuery(QueryPreferences.getStoredQuery(activity), false) }
+        searchItem.setOnSearchClickListener { searchItem.setQuery(QueryPreferences.getStoredQuery(activity, QueryPreferences.PREF_SEARCH_QUERY), false) }
 
         return view
     }

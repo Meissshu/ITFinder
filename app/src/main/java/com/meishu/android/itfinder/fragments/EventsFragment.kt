@@ -18,8 +18,6 @@ class EventsFragment : BaseFragment() {
 
     override fun provideRecyclerTag(): Int = R.id.recycler_view_events
 
-    override fun provideTag(): String = "Events fragment"
-
     override fun provideLayout(): Int = R.layout.events_fragment
 
     private lateinit var progressBar: ImageView

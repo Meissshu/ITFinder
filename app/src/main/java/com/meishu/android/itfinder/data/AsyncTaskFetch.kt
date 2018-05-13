@@ -13,8 +13,8 @@ class AsyncTaskFetch(private val query: String?) : AsyncTask<Unit, Unit, List<Po
 
     override fun doInBackground(vararg p0: Unit): List<Post> {
         val provider = ItEventsComProvider()
-
         val timepad = TimePadProvider()
+
         val result = ArrayList<Post>()
 
         when (query) {
@@ -25,6 +25,10 @@ class AsyncTaskFetch(private val query: String?) : AsyncTask<Unit, Unit, List<Po
 
             LikedFragment.LIKED_QUERY -> {
                 result.addAll(PostRepository.getAll())
+            }
+
+            "" -> {
+                return result
             }
 
             else -> {
