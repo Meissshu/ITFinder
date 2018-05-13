@@ -4,4 +4,6 @@
     <string name="pref_sum_lang">Language settings</string>
     <string name="pref_title_notif_screen">Notification pref screen</string>
     <string name="pref_sum_notif_screen">Notification control</string>
+    <string name="notification_ticker">New tracked post on ITFinder!</string>
+    <string name="notification_title">New post by tracked theme %1$s</string>
 </resources>

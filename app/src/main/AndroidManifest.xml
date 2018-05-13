@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.meishu.android.itfinder">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     
     <application
@@ -20,6 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingsActivity" />
+
+        <service android:name=".fragments.TrackService" />
     </application>
 
 </manifest>

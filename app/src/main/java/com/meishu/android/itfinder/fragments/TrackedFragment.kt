@@ -1,16 +1,15 @@
 package com.meishu.android.itfinder.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import android.widget.SearchView
 import com.meishu.android.itfinder.R
 import com.meishu.android.itfinder.data.QueryPreferences
 
@@ -19,6 +18,11 @@ import com.meishu.android.itfinder.data.QueryPreferences
  * Created by Meishu on 18.02.2018.
  */
 class TrackedFragment : BaseFragment() {
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, TrackedFragment::class.java)
+    }
+
     override fun provideEmptyTextTag(): Int = R.id.tracked_empty_data
 
     override fun provideRecyclerTag(): Int = R.id.recycler_view_tracked
@@ -48,6 +52,7 @@ class TrackedFragment : BaseFragment() {
 
         trackedItem.setText(QueryPreferences.getStoredQuery(activity, QueryPreferences.PREF_TRACKED_QUERY))
 
+        TrackService.setServiceAlarm(activity, true)
         return view
     }
 
@@ -59,15 +64,6 @@ class TrackedFragment : BaseFragment() {
             imm.hideSoftInputFromWindow(this.view.rootView.windowToken, 0)
         }
     }
-
-//    private fun closeKeyboard() {
-//        val view = activity.currentFocus
-//
-//        if (view != null) {
-//            val imm = activity.applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//            imm.hideSoftInputFromWindow(this.view.rootView.windowToken, 0)
-//        }
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
