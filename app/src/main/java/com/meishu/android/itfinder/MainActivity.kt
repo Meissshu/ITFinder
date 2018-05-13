@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.meishu.android.itfinder.data.DataCenter
 import com.meishu.android.itfinder.fragments.EventsFragment
 import com.meishu.android.itfinder.fragments.LikedFragment
 import com.meishu.android.itfinder.fragments.SearchFragment
@@ -24,10 +25,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
+    private lateinit var dataCenter: DataCenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setupPermissions()
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -39,12 +42,11 @@ class MainActivity : AppCompatActivity() {
 
         tabLayout = findViewById(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager) // autorefresh?
-
-        setupPermissions()
     }
 
-    private fun setupPermissions() = {
+    private fun setupPermissions()  {
         PreferenceManager.setDefaultValues(applicationContext, R.xml.preferences, false)
+        dataCenter = DataCenter(resources, PreferenceManager.getDefaultSharedPreferences(this))
         // TODO: load stuff from shared prefferences
     }
 

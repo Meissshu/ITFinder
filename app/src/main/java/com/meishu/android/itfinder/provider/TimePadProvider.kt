@@ -11,7 +11,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
 
-class TimePadProvider {
+class TimePadProvider: Provider {
 
     companion object {
         const val TAG = "TimePad provider"
@@ -27,12 +27,12 @@ class TimePadProvider {
                 .build()
     }
 
-    fun fetchPosts() : List<Post> {
+    override fun fetchPosts() : List<Post> {
         val url = buildUrl(null)
         return downloadPosts(url)
     }
 
-    fun searchPosts(query : String) : List<Post> {
+    override fun searchPosts(query : String) : List<Post> {
         val url = buildUrl(query)
         return downloadPosts(url)
     }

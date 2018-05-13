@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import android.util.Log
 import com.meishu.android.itfinder.R
+import com.meishu.android.itfinder.data.DataCenter
 import com.meishu.android.itfinder.data.QueryPreferences
 import com.meishu.android.itfinder.model.Post
 import com.meishu.android.itfinder.provider.TimePadProvider
@@ -54,25 +55,17 @@ class TrackService(private val tag: String = "TrackService") : IntentService(tag
         val query = QueryPreferences.getStoredQuery(this, QueryPreferences.PREF_TRACKED_QUERY)
         val lastResult = QueryPreferences.getStoredQuery(this, QueryPreferences.PREF_LAST_RESULT_IT)
 
-        val results = ArrayList<Post>()
+        val results = DataCenter.provideData(query)
+        var resultId : String? = null
 
-        val smth = TimePadProvider()
-        when (query) {
-            null -> results.addAll(smth.fetchPosts())
-            "" -> results.addAll(ArrayList())
-            else -> results.addAll(smth.searchPosts(query))
-        }
-
-        if (results.isEmpty()) {
-            return
-        }
-
-        val resultId = results[0].title
-        if (resultId == lastResult) {
-            Log.i(tag, "Old result: $resultId")
-        } else {
-            Log.i(tag, "New result: $resultId")
-            query?.let { createNotification(it, resultId) }
+        if (!results.isEmpty()) {
+            resultId = results[0].title
+            if (resultId == lastResult) {
+                Log.i(tag, "Old result: $resultId")
+            } else {
+                Log.i(tag, "New result: $resultId")
+                query?.let { createNotification(it, resultId) }
+            }
         }
 
         QueryPreferences.setStoredQuery(this, QueryPreferences.PREF_LAST_RESULT_IT, resultId)

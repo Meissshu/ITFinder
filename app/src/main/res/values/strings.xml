@@ -6,4 +6,6 @@
     <string name="pref_sum_notif_screen">Notification control</string>
     <string name="notification_ticker">New tracked post on ITFinder!</string>
     <string name="notification_title">New post by tracked theme %1$s</string>
+    <string name="it_events">itevents</string>
+    <string name="timepad">timepad</string>
 </resources>

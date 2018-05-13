@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ItEventsComProvider {
+class ItEventsComProvider: Provider{
 
     companion object {
         const val CSS_Q_SECTION_CLASS = ".section"
@@ -70,11 +70,11 @@ class ItEventsComProvider {
             post.source.contains(query, true) ||
             post.place.contains(query, true)
 
-    fun fetchPosts(): List<Post> {
+    override fun fetchPosts(): List<Post> {
         return provide(null)
     }
 
-    fun searchPosts(query: String): List<Post> {
+    override fun searchPosts(query: String): List<Post> {
         return provide(query)
     }
 

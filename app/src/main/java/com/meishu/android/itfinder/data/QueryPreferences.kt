@@ -13,7 +13,7 @@ object QueryPreferences {
                     .getDefaultSharedPreferences(context)
                     .getString(type, null)
 
-    fun setStoredQuery(context: Context, type: String, query: String) =
+    fun setStoredQuery(context: Context, type: String, query: String?) =
             PreferenceManager
                     .getDefaultSharedPreferences(context)
                     .edit()

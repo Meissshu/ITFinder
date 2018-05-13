@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="dataSourceArr">
-        <item>First source</item>
-        <item>Second source</item>
-        <item>Third source</item>
+        <item>https://it-events.com/</item>
+        <item>https://welcome.timepad.ru/</item>
     </string-array>
 
     <string-array name="dataSourceVal">
-        <item>first url</item>
-        <item>second url</item>
-        <item>some url</item>
+        <item>@string/it_events</item>
+        <item>@string/timepad</item>
     </string-array>
 
     <string-array name="dataSourceVal_def">
-        <item>first url</item>
-        <item>second url</item>
-        <item>some url</item>
+        <item>@string/it_events</item>
+        <item>@string/timepad</item>
     </string-array>
 
     <!--TODO: i18n-->

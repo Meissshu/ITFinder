@@ -19,13 +19,13 @@ import com.meishu.android.itfinder.model.Post
  */
 abstract class BaseFragment : Fragment() {
 
-    abstract fun provideLayout() : Int
-    abstract fun provideRecyclerTag() : Int
-    abstract fun provideEmptyTextTag() : Int
+    abstract fun provideLayout(): Int
+    abstract fun provideRecyclerTag(): Int
+    abstract fun provideEmptyTextTag(): Int
 
-    var data : List<Post> = ArrayList()
-    lateinit var recycle : RecyclerView
-    lateinit var emptyText : TextView
+    var data: List<Post> = ArrayList()
+    lateinit var recycle: RecyclerView
+    lateinit var emptyText: TextView
     private lateinit var asyncTask: AsyncTaskFetch
 
 
@@ -59,13 +59,13 @@ abstract class BaseFragment : Fragment() {
         val scrollPosition = (recycle.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition() ?: 0
 
         recycle.layoutManager = layoutManager
-        recycle.scrollToPosition(scrollPosition)
+        recycle.smoothScrollToPosition(scrollPosition)
         updateAdapter()
 
         return rootView
     }
 
-     fun updateAdapter() {
+    fun updateAdapter() {
         if (isAdded) {
             val adapter = PostAdapter(data, activity)
             recycle.adapter = adapter
@@ -73,7 +73,7 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-     private fun setupVisibilityAfterFetching() {
+    private fun setupVisibilityAfterFetching() {
         if (data.isEmpty()) {
             recycle.visibility = View.GONE
             emptyText.visibility = View.VISIBLE
@@ -83,7 +83,7 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-     fun updateItems(query : String?, progressBar : ImageView) {
+    fun updateItems(query: String?, progressBar: ImageView) {
         setupVisibilityWhileFetching(progressBar)
         asyncTask = AsyncTaskFetch(query)
         asyncTask.setListener(object : DataPreparedListener {
