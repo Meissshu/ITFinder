@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:asp="http://schemas.android.com/apk/res-auto"
     android:key="unique">
 
     <android.support.v14.preference.MultiSelectListPreference
@@ -9,6 +10,15 @@
         android:key="dataSourceListPref"
         android:title="Data sources"
         android:summary="Sites to read"/>
+
+    <android.support.v7.preference.SeekBarPreference
+        android:key="seek_bar_key"
+        android:title="Threshold"
+        android:summary="Post by page"
+        android:defaultValue="@integer/def_seek_bar"
+        android:max="@integer/max_seek_bar"
+        asp:min="@integer/min_seek_bar">
+    </android.support.v7.preference.SeekBarPreference>
 
     <!--TODO: hard coded strings-->
     <PreferenceScreen
