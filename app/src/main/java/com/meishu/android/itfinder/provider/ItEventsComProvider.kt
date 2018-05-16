@@ -21,11 +21,12 @@ class ItEventsComProvider: Provider{
         const val PAGING = "/events?page="
     }
 
-    private val templates = ArrayList<Post>()
+    private var templates = ArrayList<Post>()
 
     private fun provide(query: String?, threshold: Int): List<Post> {
         var page = 0
         var isDone = false
+        templates = ArrayList()
 
         while (!isDone) {
             try {

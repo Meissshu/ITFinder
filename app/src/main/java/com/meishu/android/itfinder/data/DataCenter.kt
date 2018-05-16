@@ -65,6 +65,7 @@ class DataCenter(sharedPrefs: SharedPreferences, resources: Resources) {
         )
         SOURCE_KEY = resources.getString(R.string.data_source_key)
         THRESHOLD_KEY = resources.getString(R.string.seek_bar_key)
+        DEFAULT_THRESHOLD = sharedPrefs.getInt(THRESHOLD_KEY, 10)
         updateWithNewSet(sharedPrefs)
     }
 }
