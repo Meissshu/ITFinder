@@ -19,12 +19,11 @@ class ItEventsComProvider: Provider{
         const val CSS_Q_INFO_CLASS = ".event-list-item__info"
         const val CSS_Q_EVENTS_CLASS = ".event-list-item"
         const val PAGING = "/events?page="
-        const val THRESHOLD = 10
     }
 
     private val templates = ArrayList<Post>()
 
-    private fun provide(query: String?): List<Post> {
+    private fun provide(query: String?, threshold: Int): List<Post> {
         var page = 0
         var isDone = false
 
@@ -41,7 +40,7 @@ class ItEventsComProvider: Provider{
                 }
 
                 for (event in events) {
-                    if (templates.size >= THRESHOLD) {
+                    if (templates.size >= threshold) {
                         isDone = true
                         break
                     }
@@ -70,12 +69,12 @@ class ItEventsComProvider: Provider{
             post.source.contains(query, true) ||
             post.place.contains(query, true)
 
-    override fun fetchPosts(): List<Post> {
-        return provide(null)
+    override fun fetchPosts(threshold: Int): List<Post> {
+        return provide(null, threshold)
     }
 
-    override fun searchPosts(query: String): List<Post> {
-        return provide(query)
+    override fun searchPosts(query: String, threshold: Int): List<Post> {
+        return provide(query, threshold)
     }
 
     private fun generateTemplateFromEvent(event: Element): Post {

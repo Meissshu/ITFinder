@@ -7,12 +7,12 @@
         android:defaultValue="@array/dataSourceVal_def"
         android:entries="@array/dataSourceArr"
         android:entryValues="@array/dataSourceVal"
-        android:key="dataSourceListPref"
+        android:key="@string/data_source_key"
         android:title="Data sources"
         android:summary="Sites to read"/>
 
     <android.support.v7.preference.SeekBarPreference
-        android:key="seek_bar_key"
+        android:key="@string/seek_bar_key"
         android:title="Threshold"
         android:summary="Post by page"
         android:defaultValue="@integer/def_seek_bar"

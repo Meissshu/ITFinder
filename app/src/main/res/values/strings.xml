@@ -8,4 +8,6 @@
     <string name="notification_title">New post by tracked theme %1$s</string>
     <string name="it_events">itevents</string>
     <string name="timepad">timepad</string>
+    <string name="data_source_key">dataSourceListPref</string>
+    <string name="seek_bar_key">seekBarPref</string>
 </resources>

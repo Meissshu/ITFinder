@@ -13,7 +13,9 @@ import com.meishu.android.itfinder.provider.TimePadProvider
 class DataCenter(sharedPrefs: SharedPreferences, resources: Resources) {
 
     companion object {
-        const val SOURCE_KEY = "dataSourceListPref"
+        var DEFAULT_THRESHOLD = 10
+        lateinit var SOURCE_KEY: String
+        lateinit var THRESHOLD_KEY: String
         private val sources = ArrayList<Provider>()
         private lateinit var allSources: Map<String, Provider>
 
@@ -31,7 +33,7 @@ class DataCenter(sharedPrefs: SharedPreferences, resources: Resources) {
             when (query) {
                 null -> {
                     for (provider in sources) {
-                        data.addAll(provider.fetchPosts())
+                        data.addAll(provider.fetchPosts(DEFAULT_THRESHOLD))
                     }
                 }
 
@@ -45,7 +47,7 @@ class DataCenter(sharedPrefs: SharedPreferences, resources: Resources) {
 
                 else -> {
                     for (provider in sources) {
-                        data.addAll(provider.searchPosts(query))
+                        data.addAll(provider.searchPosts(query, DEFAULT_THRESHOLD))
                     }
                 }
             }
@@ -61,6 +63,8 @@ class DataCenter(sharedPrefs: SharedPreferences, resources: Resources) {
                 resources.getString(R.string.it_events) to ItEventsComProvider(),
                 resources.getString(R.string.timepad) to TimePadProvider()
         )
+        SOURCE_KEY = resources.getString(R.string.data_source_key)
+        THRESHOLD_KEY = resources.getString(R.string.seek_bar_key)
         updateWithNewSet(sharedPrefs)
     }
 }

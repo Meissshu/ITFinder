@@ -42,8 +42,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
             DataCenter.SOURCE_KEY -> {
                 DataCenter.updateWithNewSet(preference.sharedPreferences)
             }
-            "seek_bar_key" -> {
+            DataCenter.THRESHOLD_KEY -> {
                 Log.i("PREFERENCE", "new value: ${(preference as SeekBarPreference).value}")
+                DataCenter.DEFAULT_THRESHOLD = preference.value
             }
         }
     }

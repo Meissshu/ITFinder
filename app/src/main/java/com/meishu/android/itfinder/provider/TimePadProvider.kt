@@ -3,6 +3,7 @@ package com.meishu.android.itfinder.provider
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
+import com.meishu.android.itfinder.data.DataCenter
 import com.meishu.android.itfinder.model.Post
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -11,48 +12,55 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
 
-class TimePadProvider: Provider {
+class TimePadProvider : Provider {
 
     companion object {
         const val TAG = "TimePad provider"
         //const val API_KEY = ""
         const val ROOT = "https://api.timepad.ru/v1/events"
         const val SOURCE = "https://welcome.timepad.ru/"
-        val ENDPOINT: Uri = Uri.parse(ROOT)
-                .buildUpon()
-                .appendQueryParameter("limit", "10")
-                .appendQueryParameter("sort", "+starts_at")
-                .appendQueryParameter("category_ids", "452")
-                .appendQueryParameter("fields", "location")
-                .build()
+        private const val SORT_BY = "+starts_at"
+        private const val CATEGORY = "452"
+        private const val FIELDS = "location"
+        //var ENDPOINT: Uri = Uri()
     }
 
-    override fun fetchPosts() : List<Post> {
-        val url = buildUrl(null)
+    private fun getEndpoint(limit: Int = DataCenter.DEFAULT_THRESHOLD, sortBy: String = SORT_BY, category: String = CATEGORY, fieldsToShow: String = FIELDS) =
+            Uri.parse(ROOT)
+                    .buildUpon()
+                    .appendQueryParameter("limit", Integer.toString(limit))
+                    .appendQueryParameter("sort", sortBy)
+                    .appendQueryParameter("category_ids", category)
+                    .appendQueryParameter("fields", fieldsToShow)
+                    .build()
+
+
+    override fun fetchPosts(threshold: Int): List<Post> {
+        val url = buildUrl(null, threshold)
         return downloadPosts(url)
     }
 
-    override fun searchPosts(query : String) : List<Post> {
-        val url = buildUrl(query)
+    override fun searchPosts(query: String, threshold: Int): List<Post> {
+        val url = buildUrl(query, threshold)
         return downloadPosts(url)
     }
 
-    private fun downloadPosts(url : String) : List<Post> {
-        
-        var result : List<Post> = ArrayList()
+    private fun downloadPosts(url: String): List<Post> {
+
+        var result: List<Post> = ArrayList()
         try {
             val jsonString = getUrlString(url)
             result = parseJson(jsonString)
             Log.i(TAG, "Got json!")
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Log.i(TAG, "Failed!")
             e.printStackTrace()
         }
         return result
     }
 
-    private fun buildUrl(query : String?) : String {
-        val uriBuilder = ENDPOINT.buildUpon()
+    private fun buildUrl(query: String?, threshold: Int): String {
+        val uriBuilder = getEndpoint(threshold).buildUpon()
         if (query != null) {
             uriBuilder.appendQueryParameter("keywords", prepareQueryString(query))
         }
@@ -62,7 +70,7 @@ class TimePadProvider: Provider {
 
     private fun prepareQueryString(query: String): String = query.replace(" ", ",")
 
-    private fun parseJson(jsonString : String) : List<Post> {
+    private fun parseJson(jsonString: String): List<Post> {
         val jsonBody = JSONObject(jsonString)
         val jsonValues = jsonBody.getJSONArray("values")
         val array = ArrayList<Post>()
@@ -79,7 +87,7 @@ class TimePadProvider: Provider {
         return array
     }
 
-    private fun parseLocation(jsonObject : JSONObject) : String {
+    private fun parseLocation(jsonObject: JSONObject): String {
         val stringBuilder = StringBuilder("")
         try {
             val locationObject = jsonObject.getJSONObject("location")
@@ -92,18 +100,18 @@ class TimePadProvider: Provider {
 
             string = locationObject.getString("address")
             stringBuilder.append(", ").append(string)
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
         return stringBuilder.toString()
     }
 
-    private fun getUrlString(url : String) = String(getUrlBytes(url))
+    private fun getUrlString(url: String) = String(getUrlBytes(url))
 
     private fun getUrlBytes(urlSource: String): ByteArray {
         val url = URL(urlSource)
-        val connection : HttpURLConnection = url.openConnection() as HttpURLConnection
+        val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
         try {
             val out = ByteArrayOutputStream()
             val input = connection.inputStream
@@ -127,7 +135,7 @@ class TimePadProvider: Provider {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun dateStringToLong(date : String) : Long {
+    private fun dateStringToLong(date: String): Long {
         val df = SimpleDateFormat("yyyy-MM-dd")
         return df.parse(date).time
     }
